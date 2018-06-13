@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyCQRS.Application\MyCQRS.Application.csproj" />
+    <ProjectReference Include="..\MyCQRS.CrossCutting.Bus\MyCQRS.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\MyCQRS.Domain.Core\MyCQRS.Domain.Core.csproj" />
+    <ProjectReference Include="..\MyCQRS.Domain\MyCQRS.Domain.csproj" />
+    <ProjectReference Include="..\MyCQRS.Infra.Data\MyCQRS.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>

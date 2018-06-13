@@ -1,0 +1,35 @@
+﻿@model List<MyCQRS.Application.ViewModels.PhotographerViewModel>
+
+<h1>Fotógrafos</h1>
+
+<table class="ui table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>ID</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>
+                    <div class="ui buttons">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="ui button">Editar</a>
+                        <form asp-action="Delete" asp-controller="Photographer">
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <input type="submit" value="Excluir" class="ui red button" onclick="return confirm('Deseja excluir?')" />
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Add" asp-controller="Photographer" class="ui button">Novo Fotografo</a>

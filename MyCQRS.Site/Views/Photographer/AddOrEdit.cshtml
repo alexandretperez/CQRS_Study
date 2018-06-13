@@ -1,0 +1,22 @@
+﻿@model MyCQRS.Application.ViewModels.PhotographerViewModel
+
+<form asp-controller="Photographer" asp-action="Save">
+
+    <div class="ui form">
+        <div class="field">
+            <label for="Id">ID</label>
+            <input asp-for="Id" readonly>
+        </div>
+        <div class="field">
+            <label for="Name">Nome</label>
+            <input asp-for="Name">
+        </div>
+        <div class="field">
+            <label for="Email">Email</label>
+            <input asp-for="Email">
+        </div>
+        <div class="field">
+            <input type="submit" value="Gravar" class="ui button primary" />
+        </div>
+    </div>
+</form>
