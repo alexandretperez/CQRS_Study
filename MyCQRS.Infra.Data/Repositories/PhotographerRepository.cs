@@ -1,5 +1,7 @@
-﻿using MyCQRS.Domain.Photographers;
+﻿using MongoDB.Driver;
+using MyCQRS.Domain.Photographers;
 using MyCQRS.Domain.Photographers.Interfaces;
+using MyCQRS.Infra.Data.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,38 +10,41 @@ namespace MyCQRS.Infra.Data.Repositories
 {
     public class PhotographerRepository : IPhotographerRepository
     {
+        public PhotographerRepository(MongoDatabase db)
+        {
+            Db = db;
+        }
+
+        public MongoDatabase Db { get; }
+
         public void Add(Photographer entity)
         {
-            FakeDatabase.Photographers.Add(entity);
+            Db.Photographers.InsertOne(entity);
         }
 
         public Photographer FindByEmail(string email)
         {
-            return FakeDatabase.Photographers.FirstOrDefault(p => p.Email == email);
+            return Db.Photographers.Find(p => p.Email == email).FirstOrDefault();
         }
 
         public Photographer FindById(Guid id)
         {
-            return FakeDatabase.Photographers.FirstOrDefault(p => p.Id == id);
+            return Db.Photographers.Find(p => p.Id == id).FirstOrDefault();
         }
 
         public ICollection<Photographer> GetAll()
         {
-            return FakeDatabase.Photographers;
+            return Db.Photographers.Find(FilterDefinition<Photographer>.Empty).ToList();
         }
 
         public void Remove(Guid id)
         {
-            var entity = FakeDatabase.Photographers.FirstOrDefault(p => p.Id == id);
-            if (entity != null)
-                FakeDatabase.Photographers.Remove(entity);
+            Db.Photographers.FindOneAndDelete(p => p.Id == id);
         }
 
         public void Update(Photographer entity)
         {
-            var index = FakeDatabase.Photographers.FindIndex(p => p.Id == entity.Id);
-            if (index > -1)
-                FakeDatabase.Photographers[index] = entity;
+            Db.Photographers.FindOneAndReplace(p => p.Id == entity.Id, entity);
         }
     }
 }

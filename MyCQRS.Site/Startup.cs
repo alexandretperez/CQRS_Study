@@ -26,6 +26,7 @@ namespace MyCQRS
 
             var provider = new MappingProvider();
             services.AddSingleton<IMapper>(new Mapper(provider));
+            services.AddSingleton<IConfiguration>(_ => Configuration);
 
             NativeInjectorBoostrapper.RegisterServices(services);
         }

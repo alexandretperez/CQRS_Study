@@ -8,6 +8,7 @@ using MyCQRS.Domain.Photographers.Commands;
 using MyCQRS.Domain.Photographers.Events;
 using MyCQRS.Domain.Photographers.Interfaces;
 using MyCQRS.Infra.CrossCutting.Bus;
+using MyCQRS.Infra.Data.Data;
 using MyCQRS.Infra.Data.Repositories;
 
 namespace MyCQRS.Infra.CrossCutting.IoC
@@ -36,6 +37,9 @@ namespace MyCQRS.Infra.CrossCutting.IoC
             services.AddScoped<IRequestHandler<RemovePhotographerCommand, Unit>, PhotographerCommandHandler>();
 
             // Infra Data
+            //services.AddScoped<IPhotographerRepository, FakePhotographerRepository>();
+
+            services.AddScoped<MongoDatabase>();
             services.AddScoped<IPhotographerRepository, PhotographerRepository>();
         }
     }
