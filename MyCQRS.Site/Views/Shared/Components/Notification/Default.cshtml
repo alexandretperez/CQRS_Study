@@ -1,0 +1,7 @@
+﻿@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="ui error message">
+        <h3>Ops...</h3>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}

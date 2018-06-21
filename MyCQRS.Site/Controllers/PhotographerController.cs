@@ -1,16 +1,18 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MyCQRS.Application.Interfaces;
 using MyCQRS.Application.ViewModels;
+using MyCQRS.Domain.Core.Notifications;
 using System;
 using System.Threading.Tasks;
 
 namespace MyCQRS.Controllers
 {
-    public class PhotographerController : Controller
+    public class PhotographerController : BaseController
     {
         private readonly IPhotographerAppService _service;
 
-        public PhotographerController(IPhotographerAppService service)
+        public PhotographerController(IPhotographerAppService service, INotificationHandler<DomainNotification> notifications) : base(notifications)
         {
             _service = service;
         }
@@ -44,8 +46,11 @@ namespace MyCQRS.Controllers
                 await _service.Add(model);
             else
                 _service.Update(model);
+            
+            if (IsOperationValid())
+                return RedirectToAction(nameof(Index));
 
-            return RedirectToAction(nameof(Index));
+            return View("AddOrEdit", model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

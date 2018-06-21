@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCQRS.Application.Interfaces;
 using MyCQRS.Application.Services;
 using MyCQRS.Domain.Core.Bus;
+using MyCQRS.Domain.Core.Notifications;
 using MyCQRS.Domain.Photographers.Commands;
 using MyCQRS.Domain.Photographers.Events;
 using MyCQRS.Domain.Photographers.Interfaces;
@@ -30,6 +31,7 @@ namespace MyCQRS.Infra.CrossCutting.IoC
             services.AddScoped<INotificationHandler<PhotographerAddedEvent>, PhotographerEventHandler>();
             services.AddScoped<INotificationHandler<PhotographerUpdatedEvent>, PhotographerEventHandler>();
             services.AddScoped<INotificationHandler<PhotographerRemovedEvent>, PhotographerEventHandler>();
+            services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
 
             // Domain Commands
             services.AddScoped<IRequestHandler<AddPhotographerCommand, Unit>, PhotographerCommandHandler>();

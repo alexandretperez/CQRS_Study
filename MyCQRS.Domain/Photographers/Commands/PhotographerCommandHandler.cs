@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MyCQRS.Domain.Core.Bus;
+using MyCQRS.Domain.Core.Commands;
 using MyCQRS.Domain.Core.Notifications;
 using MyCQRS.Domain.Photographers.Events;
 using MyCQRS.Domain.Photographers.Interfaces;
@@ -23,9 +24,25 @@ namespace MyCQRS.Domain.Photographers.Commands
             _bus = bus;
         }
 
+        private bool IsEmailAvailable(Command command, Photographer photographer)
+        {
+            var existingPhotographer = _repository.FindByEmail(photographer.Email);
+
+            if (existingPhotographer != null && existingPhotographer.Id != photographer.Id && !existingPhotographer.Equals(photographer))
+            {
+                _bus.RaiseEvent(new DomainNotification(command.GetCommandName(), "The photographer e-mail has already been taken."));
+                return false;
+            }
+
+            return true;
+        }
+
         public Task<Unit> Handle(AddPhotographerCommand request, CancellationToken cancellationToken)
         {
             var photographer = new Photographer(Guid.NewGuid(), request.Name, request.Email);
+
+            if (!IsEmailAvailable(request, photographer))
+                return Unit.Task;
 
             _repository.Add(photographer);
 
@@ -40,11 +57,8 @@ namespace MyCQRS.Domain.Photographers.Commands
 
             var existingPhotographer = _repository.FindByEmail(photographer.Email);
 
-            if (existingPhotographer != null && existingPhotographer.Id != photographer.Id && !existingPhotographer.Equals(photographer))
-            {
-                _bus.RaiseEvent(new DomainNotification(request.GetCommandName(), "The photographer e-mail has already been taken."));
+            if (!IsEmailAvailable(request, photographer))
                 return Unit.Task;
-            }
 
             _repository.Update(photographer);
             _bus.RaiseEvent(new PhotographerUpdatedEvent(photographer.Id, photographer.Name, photographer.Email));
